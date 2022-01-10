@@ -19,9 +19,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 @Configuration
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+
     @Autowired
     private JwtAuthProvider jwtAuthProvider;
-
     @Override
     @Bean
     protected AuthenticationManager authenticationManager() throws Exception {
@@ -29,7 +29,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        var userDetailsServices =new CustomDetalhesUsuarioServico();
+        var userDetailsServices = new CustomDetalhesUsuarioServico();
         auth.userDetailsService(userDetailsServices).passwordEncoder(new BCryptPasswordEncoder());
     }
 
@@ -40,6 +40,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, "/api/roles/nova").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/roles").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/autenticar/login").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/usuarios").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/usuarios/nova").permitAll()
+                //.anyRequest().permitAll()
                 .anyRequest().authenticated()
                 .and().csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)

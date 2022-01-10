@@ -27,9 +27,12 @@ public class UsuarioController {
         this.roleRepositorio = roleRepositorio;
     }
 
-    @PostMapping("/")
-    public ResponseEntity<ResponseDTO<UsuarioDTO>> cadastra(@RequestBody UsuarioCadastroBody data){
+    @PostMapping("/nova")
+    public ResponseEntity<ResponseDTO<UsuarioDTO>> cadastra(@RequestBody UsuarioCadastroBody data)
+    {
+        System.out.println("aaaaa " + data);
         var usuario = usuarioServico.findUserByEmail(data.getEmail());
+        System.out.println("usuario " + usuario);
         if (usuario == null) return ResponseEntity.notFound().build();
         var optimalRole = roleRepositorio.findById(data.getRoleId());
         if (optimalRole.isEmpty()) return ResponseEntity.notFound().build();

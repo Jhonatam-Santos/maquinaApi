@@ -18,4 +18,5 @@ public class UsuarioDTO {
         this.email = usuario.getEmail();
         this.isEnable = usuario.isEnabled();
     }
+
 }

@@ -8,6 +8,7 @@ public class LocalAmostraDTO {
     private String usuario;
     private String propriedade;
     private String tamanho;
+
     public LocalAmostraDTO(LocalAmostra localAmostra) {
         this.Id = localAmostra.getId();
         this.usuario = localAmostra.getUsuario().getId();

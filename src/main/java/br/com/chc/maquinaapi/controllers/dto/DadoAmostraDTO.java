@@ -18,6 +18,7 @@ public class DadoAmostraDTO {
     private LocalDate dataAvaliacao;
     private Double massa;
     private LocalTime time;
+
     public DadoAmostraDTO(Dado dado) {
         this.id = dado.getId();
         this.local = dado.getLocal();

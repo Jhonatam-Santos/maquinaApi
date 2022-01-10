@@ -23,7 +23,7 @@ public class Usuario implements UserDetails {
     @Indexed(unique = true,direction = IndexDirection.DESCENDING)
     private String email;
     private String senha;
-    private boolean isAccountNonExpired =false;
+    private boolean isAccountNonExpired = false;
     private boolean isAccountNonLocked = true;
     private boolean isCredentialsNonExpired = true;
     private boolean isEnable;

@@ -22,13 +22,14 @@ public class RoleController {
 
     @PostMapping("/nova")
     public ResponseEntity<ResponseDTO<Role>> cadastra(@RequestBody RoleBody data){
+        System.out.println("entrou " + data);
         var role = roleRepositorio.findByRole(data.getName()).orElse(new Role());
         role.setRole(data.getName());
         roleRepositorio.save(role);
         return ResponseEntity.ok(new ResponseDTO<>("Role cadastrada com sucesso!", role));
     }
 
-    @GetMapping
+    @GetMapping("/")
     public Page<Role> obterRoles(@PageableDefault(sort = "id",direction = Sort.Direction.ASC,page = 0,size = 10) Pageable paginacao){
         return roleRepositorio.findAll(paginacao);
     }
