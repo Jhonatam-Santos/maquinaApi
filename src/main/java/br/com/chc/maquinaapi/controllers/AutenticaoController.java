@@ -29,7 +29,8 @@ public class AutenticaoController {
 
 
     @PostMapping("/login")
-    public ResponseEntity<ResponseDTO<UsuarioLoginDTO>> login(@RequestBody AuthBody data){
+    public ResponseEntity<ResponseDTO<UsuarioLoginDTO>> login(@RequestBody AuthBody data)
+    {
         var usuario = usuarioRepositorio.findUserByEmail(data.getUsername());
         if (usuario == null) return ResponseEntity.notFound().build();
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(usuario.getUsername(), data.getPassword()));

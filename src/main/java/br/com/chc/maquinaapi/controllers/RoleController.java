@@ -21,8 +21,8 @@ public class RoleController {
     }
 
     @PostMapping("/nova")
-    public ResponseEntity<ResponseDTO<Role>> cadastra(@RequestBody RoleBody data){
-        System.out.println("entrou " + data);
+    public ResponseEntity<ResponseDTO<Role>> cadastra(@RequestBody RoleBody data)
+    {
         var role = roleRepositorio.findByRole(data.getName()).orElse(new Role());
         role.setRole(data.getName());
         roleRepositorio.save(role);
