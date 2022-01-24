@@ -23,16 +23,19 @@ public class JwtAuthProvider {
     private long validityInMilliseconds = 3600000;
     private final CustomDetalhesUsuarioServico detalhesUsuarioServico;
 
-    public JwtAuthProvider(CustomDetalhesUsuarioServico detalhesUsuarioServico) {
+    public JwtAuthProvider(CustomDetalhesUsuarioServico detalhesUsuarioServico)
+    {
         this.detalhesUsuarioServico = detalhesUsuarioServico;
     }
 
     @PostConstruct
-    protected void init(){
+    protected void init()
+    {
         secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
     }
 
-    public String createToken(String userName, Set<Role> roleSet){
+    public String createToken(String userName, Set<Role> roleSet)
+    {
         var claims = Jwts.claims().setSubject(userName);
         claims.put("roles",roleSet);
         Date now = new Date();
@@ -45,23 +48,28 @@ public class JwtAuthProvider {
                 .compact();
     }
 
-    public Authentication getAuthentication(String token){
+    public Authentication getAuthentication(String token)
+    {
         UserDetails userDetails = this.detalhesUsuarioServico.loadUserByUsername(getUsername(token));
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
 
-    public String getUsername(String token){
+    public String getUsername(String token)
+    {
         return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
     }
 
-    public String resolveToken(HttpServletRequest req) {
+    public String resolveToken(HttpServletRequest req)
+    {
         String bearerToken = req.getHeader("Authorization");
         if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
             return bearerToken.substring(7);
         }
         return null;
     }
-    public boolean validateToken(String token) {
+
+    public boolean validateToken(String token)
+    {
         try {
             Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
             return !claims.getBody().getExpiration().before(new Date());

@@ -25,7 +25,9 @@ public class UsuarioController {
     private final CustomDetalhesUsuarioServico usuarioServico;
     private final UsuarioRepositorio usuarioRepositorio;
     private final RoleRepositorio roleRepositorio;
-    public UsuarioController(CustomDetalhesUsuarioServico usuarioServico, UsuarioRepositorio usuarioRepositorio, RoleRepositorio roleRepositorio) {
+
+    public UsuarioController(CustomDetalhesUsuarioServico usuarioServico, UsuarioRepositorio usuarioRepositorio, RoleRepositorio roleRepositorio)
+    {
         this.usuarioServico = usuarioServico;
         this.usuarioRepositorio = usuarioRepositorio;
         this.roleRepositorio = roleRepositorio;
@@ -34,7 +36,6 @@ public class UsuarioController {
     @PostMapping("nova")
     public ResponseEntity<ResponseDTO<UsuarioDTO>> cadastra(@RequestBody UsuarioCadastroBody data)
     {
-        //eu quero veririficar se há um usuário no banco, caso não haja, eu vou criar um novo usuário
         var emailVerify = usuarioServico.findUserByEmail(data.getEmail());
         if (emailVerify != null) return ResponseEntity.noContent().build();
         var optimalRole = roleRepositorio.findById(data.getRoleId());

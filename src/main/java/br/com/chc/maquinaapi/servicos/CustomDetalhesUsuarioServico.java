@@ -27,30 +27,38 @@ public class CustomDetalhesUsuarioServico implements UserDetailsService {
     private PasswordEncoder bCryptPasswordEncoder;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException
+    {
         var usuario = findUserByEmail(username);
-        if(usuario == null){
+        if(usuario == null) {
             throw  new UsernameNotFoundException("Os dados de login foram inseridos incorretamente!");
         }
         var authorities = getUserAuthority(usuario.getRoles());
         return usuarioAutenticadoBuilder(usuario,authorities);
     }
-    private List<GrantedAuthority> getUserAuthority(Set<Role> usuarioRoles) {
+
+    private List<GrantedAuthority> getUserAuthority(Set<Role> usuarioRoles)
+    {
         Set<GrantedAuthority> roles = new HashSet<>();
         usuarioRoles.forEach(role->roles.add(new SimpleGrantedAuthority(role.getRole())));
         return new ArrayList<>(roles);
     }
 
-    private UserDetails usuarioAutenticadoBuilder(Usuario usuario, List<GrantedAuthority> authorities) {
+    private UserDetails usuarioAutenticadoBuilder(Usuario usuario, List<GrantedAuthority> authorities)
+    {
         return new org.springframework.security.core.userdetails.User(usuario.getUsername(),usuario.getPassword(),authorities);
     }
-    public Usuario findUserByEmail(String username){
-         var optional = usuarioRepositorio.findByEmail(username);
-         if(optional.isEmpty()) return null;
+
+    public Usuario findUserByEmail(String email)
+    {
+         var optional = usuarioRepositorio.findByEmail(email);
+         System.out.println(optional.get());
+         if(optional.isEmpty()) System.out.print("vazio");
          return optional.get();
     }
 
-    public void saveUser(Usuario usuario,String roleName){
+    public void saveUser(Usuario usuario,String roleName)
+    {
         usuario.setSenha(bCryptPasswordEncoder.encode(usuario.getPassword()));
         usuario.setEnable(true);
         Optional<Role> optimalRole = roleRepositorio.findByRole(roleName);

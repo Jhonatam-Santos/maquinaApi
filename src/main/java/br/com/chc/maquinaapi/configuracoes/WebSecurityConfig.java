@@ -24,17 +24,20 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private JwtAuthProvider jwtAuthProvider;
     @Override
     @Bean
-    protected AuthenticationManager authenticationManager() throws Exception {
+    protected AuthenticationManager authenticationManager() throws Exception
+    {
         return super.authenticationManager();
     }
     @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception
+    {
         var userDetailsServices = new CustomDetalhesUsuarioServico();
         auth.userDetailsService(userDetailsServices).passwordEncoder(new BCryptPasswordEncoder());
     }
 
     @Override
-    protected void configure(HttpSecurity http) throws Exception {
+    protected void configure(HttpSecurity http) throws Exception
+    {
         //TODO - Aqui voce consegue alterar as configuracoes de permissoes de acesso, como por exemplo, permitir ou nao acesso ao login, permitir ou nao acesso ao caminho de recuperacao de senha, etc.
         http.authorizeRequests()
                 .antMatchers(HttpMethod.POST, "/api/roles/nova").permitAll()

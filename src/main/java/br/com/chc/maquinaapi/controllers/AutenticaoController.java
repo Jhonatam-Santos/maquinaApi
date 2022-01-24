@@ -3,6 +3,7 @@ package br.com.chc.maquinaapi.controllers;
 import br.com.chc.maquinaapi.controllers.dto.ResponseDTO;
 import br.com.chc.maquinaapi.controllers.dto.UsuarioLoginDTO;
 import br.com.chc.maquinaapi.controllers.forms.AuthBody;
+import br.com.chc.maquinaapi.dados.modelo.Usuario;
 import br.com.chc.maquinaapi.providers.JwtAuthProvider;
 import br.com.chc.maquinaapi.servicos.CustomDetalhesUsuarioServico;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +22,8 @@ public class AutenticaoController {
     private final JwtAuthProvider jwtAuthProvider;
     private final CustomDetalhesUsuarioServico usuarioRepositorio;
 
-    public AutenticaoController(JwtAuthProvider jwtAuthProvider, CustomDetalhesUsuarioServico usuarioRepositorio, AuthenticationManager authenticationManager) {
+    public AutenticaoController(JwtAuthProvider jwtAuthProvider, CustomDetalhesUsuarioServico usuarioRepositorio, AuthenticationManager authenticationManager)
+    {
         this.jwtAuthProvider = jwtAuthProvider;
         this.usuarioRepositorio = usuarioRepositorio;
         this.authenticationManager = authenticationManager;
@@ -31,9 +33,13 @@ public class AutenticaoController {
     @PostMapping("/login")
     public ResponseEntity<ResponseDTO<UsuarioLoginDTO>> login(@RequestBody AuthBody data)
     {
-        var usuario = usuarioRepositorio.findUserByEmail(data.getUsername());
+        AuthBody authBody = new AuthBody();
+        authBody.setEmail(data.getEmail());
+        authBody.setPassword(data.getPassword());
+
+        var usuario = usuarioRepositorio.findUserByEmail(authBody.getEmail());
         if (usuario == null) return ResponseEntity.notFound().build();
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(usuario.getUsername(), data.getPassword()));
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authBody.getEmail(), authBody.getPassword()));
         String token = jwtAuthProvider.createToken(usuario.getUsername(), usuario.getRoles());
         return ResponseEntity.ok(new ResponseDTO<>("Login Efetuado com sucesso!", new UsuarioLoginDTO(usuario, token)));
     }
