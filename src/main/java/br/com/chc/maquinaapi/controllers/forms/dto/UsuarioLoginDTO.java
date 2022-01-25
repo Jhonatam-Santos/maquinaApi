@@ -4,12 +4,12 @@ import br.com.chc.maquinaapi.dados.modelo.Usuario;
 
 public class UsuarioLoginDTO {
 
-    private String userName;
+    private String username;
     private String token;
 
     public UsuarioLoginDTO(Usuario usuario, String token)
     {
-        this.userName = usuario.getUsername();
+        this.username = usuario.getNome();
         this.token = token;
     }
 }
